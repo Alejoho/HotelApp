@@ -1,0 +1,10 @@
+@page "/Welcome/{FirstName}/{LastName}"
+@model HotelApp.Web.Pages.Welcome
+
+@{
+    ViewData["Title"] = "Book A Room";
+}
+
+<h1>Welcome to my app</h1>
+
+<h2>@Model.FirstName @Model.LastName</h2>

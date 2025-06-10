@@ -1,0 +1,63 @@
+﻿@page
+@using HotelAppLibrary.Models
+@model HotelApp.Web.Pages.RoomSearchModel
+@{
+    ViewData["Title"] = "Room Search";
+}
+
+<h2>Select the date you want to book a room.</h2>
+<br />
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="@Model.StartDate"></label>
+        <input asp-for="@Model.StartDate"/>
+        <span asp-validation-for="@Model.StartDate" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="@Model.EndDate"></label>
+        <input asp-for="@Model.EndDate"/>
+        <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+
+@if (Model.AvailableRoomTypes?.Count > 0)
+{
+    <br/>
+    <h2>Results</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Room Type</th>
+            <th scope="col">Price per night</th>
+            <th scope="col">Total Cost</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (RoomTypeModel room in Model.AvailableRoomTypes)
+        {
+            <tr>
+                <td>
+                    <div>
+                        <strong>@room.Title</strong>
+                        <br/>
+                        <p>@room.Description</p>
+                    </div>
+                </td>
+                <td>@($"{room.Price:C}")</td>
+                <td>@($"{Helpers.CalculateTotalCost(room.Price, Model.StartDate, Model.EndDate):C}")</td>
+                <td><a asp-page="BookRoom"
+                       asp-route-roomtypeid="@room.Id"
+                       asp-route-startdate="@Model.StartDate.ToString("yyyy-MM-dd")"
+                       asp-route-enddate="@Model.EndDate.ToString("yyyy-MM-dd")"
+                       class="btn btn-primary">Book</a></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+
